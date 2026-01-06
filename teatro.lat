@@ -18,46 +18,6 @@ colores = {
     "parpadeo": "\033[5m",
     "tachado": "\033[9m ",
 
-    // Colores básicos (texto)
-    "negro": "\033[30m",
-    "rojo": "\033[31m",
-    "verde": "\033[32m",
-    "amarillo": "\033[33m",
-    "azul": "\033[34m",
-    "magenta": "\033[35m",
-    "cyan": "\033[36m",
-    "blanco": "\033[37m",
-
-    // Colores brillantes (texto)
-    "negro_claro": "\033[90m",
-    "rojo_claro": "\033[91m",
-    "verde_claro": "\033[92m",
-    "amarillo_claro": "\033[93m",
-    "azul_claro": "\033[94m",
-    "magenta_claro": "\033[95m",
-    "cyan_claro": "\033[96m",
-    "blanco_claro": "\033[97m",
-
-    // Fondo básico
-    "fondo_negro": "\033[40m",
-    "fondo_rojo": "\033[41m",
-    "fondo_verde": "\033[42m",
-    "fondo_amarillo": "\033[43m",
-    "fondo_azul": "\033[44m",
-    "fondo_magenta": "\033[45m",
-    "fondo_cyan": "\033[46m",
-    "fondo_blanco": "\033[47m",
-
-    // Fondo brillante
-    "fondo_negro_claro": "\033[100m",
-    "fondo_rojo_claro": "\033[101m",
-    "fondo_verde_claro": "\033[102m",
-    "fondo_amarillo_claro": "\033[103m",
-    "fondo_azul_claro": "\033[104m",
-    "fondo_magenta_claro": "\033[105m",
-    "fondo_cyan_claro": "\033[106m",
-    "fondo_blanco_claro": "\033[107m"
-
     //estilos seleccioandos
     "titulo": "\033[38;2;0;191;255m",      // celeste brillante (#00BFFF → RGB 0,191,255)
     "subtitulo": "\033[38;2;30;58;138m",   // azul profundo (#1E3A8A → RGB 30,58,138)
@@ -65,7 +25,7 @@ colores = {
     "opciones": "\033[38;2;64;224;208m",   // turquesa futurista (#40E0D0 → RGB 64,224,208)
     "exito": "\033[38;2;255;215;0m",       // dorado estelar (#FFD700 → RGB 255,215,0)
     "error": "\033[38;2;220;20;60m",       // rojo carmesí (#DC143C → RGB 220,20,60)
-    "resaltado": "\033[38;2;138;43;226m",  // violeta cósmico (#8A2BE2 → RGB 138,43,226)
+    "resaltado": "\033[38;2;138;43;226m"  // violeta cósmico (#8A2BE2 → RGB 138,43,226)
 }
 
 
@@ -170,9 +130,14 @@ funcion actualizar()
 
 fin
 
+/* No funciona porque los métodos crear_escena y cambiar_escena requieren argumentos 
 retorno {
     "colores": colores,
     "crear_escena": crear_escena(),
     "cambiar_escena":cambiar_escena()
 }
+*/
+
+//tu código a partir de aquí
+
 
