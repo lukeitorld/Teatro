@@ -14,6 +14,7 @@ Latino es un lenguaje de programación con sintaxis en Español creado en C, ins
 Debido a una limitación actual en el sistema de módulos de **Latino** (no es posible exportar funciones con argumentos), para utilizar **Teatro** es necesario descargar el script y crear el juego directamente dentro del mismo módulo.
 
 Por ejemplo, para definir la escena del menú principal, al final del código del módulo podemos escribir:
+<img width="1147" height="164" alt="image" src="https://github.com/user-attachments/assets/3a53b9db-e27a-42af-8418-ebfb76a01837" />
 
 ```latino
 menu = crear_escena(
@@ -24,5 +25,7 @@ menu = crear_escena(
 )
 
 cambiar_escena(menu)
+'''
+
 
 
