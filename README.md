@@ -9,3 +9,20 @@ El nombre *Teatro* refleja su enfoque narrativo: las historias se representan co
 
 ## ¿Qué es Latino?
 Latino es un lenguaje de programación con sintaxis en Español creado en C, inspirado en Lua y Python. Éste proyecto nace de la necesidad de incrementar la educación de nivel básico y avanzado, para que niños, adolescentes y también adultos se motiven a entrar en el mundo de la programación y desarrollar aplicaciones en una sintaxis a su idioma. Además, Latino es también para desarrolladores que les gustaría programar en Español, ya que Latino es completamente funcional en cualquier API en raw.
+## ¿Cómo usar?
+
+Debido a una limitación actual en el sistema de módulos de **Latino** (no es posible exportar funciones con argumentos), para utilizar **Teatro** es necesario descargar el script y crear el juego directamente dentro del mismo módulo.
+
+Por ejemplo, para definir la escena del menú principal, al final del código del módulo podemos escribir:
+
+```latino
+menu = crear_escena(
+    "Menú Principal",
+    "Bienvenido a Teatro, el módulo para hacer aventuras conversacionales",
+    0,
+    ["Opción 1", "Opción 2", "Opción 3"]
+)
+
+cambiar_escena(menu)
+
+
