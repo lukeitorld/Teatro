@@ -13,12 +13,13 @@ Latino es un lenguaje de programación con sintaxis en Español creado en C, ins
 
 Teatro puede usarse como un [Módulo] (https://manual.lenguajelatino.org/es/stable/sintaxis/Modulo.html), esto implica que solo debemos seguir los siguientes pasos:
 - Descargar el módulo teatro.lat.
-- Colocar ```teatro = incluir ("teatro")``` al comienzo del archivo donde trabajemos y listo.
+- Colocar ```teatro = incluir ("teatro")``` al comienzo del archivo donde trabajemos, también ```estado = teatro.estado``` y listo.
 ## Ejemplo mínimo: Una esena
 
 
 ```latino
 teatro = incluir ("teatro")
+estado = teatro.estado
 
 //Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena)
 menu = {
