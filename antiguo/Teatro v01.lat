@@ -1,0 +1,147 @@
+/*
+Funciona pero no se puede exportar. Todo el juego debe ser hecho en este mismo documento
+*/
+###############################################################################
+# PROGRAMA: teatro.lat
+# CREADO  : 05/01/2026
+# VERSION : 0.1
+# AUTOR   : Lukeitor
+# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola
+# DEPENDENCIAS: 
+#		ninguna
+###############################################################################
+// ==== Dependencias ====
+//no es una dependencia, pero está inspirado en el módulo colores del usuario Harry, el cual ya no es compatible con la sintáxis actual de Latino
+colores = {
+    // Estilos de texto
+    "resetear": "\033[0m",
+    "negrita": "\033[1m",
+    "italicas": "\033[3m",
+    "subrayado": "\033[4m",
+    "parpadeo": "\033[5m",
+    "tachado": "\033[9m ",
+
+    //estilos seleccioandos
+    "titulo": "\033[38;2;0;191;255m",      // celeste brillante (#00BFFF → RGB 0,191,255)
+    "subtitulo": "\033[38;2;30;58;138m",   // azul profundo (#1E3A8A → RGB 30,58,138)
+    "texto": "\033[38;2;192;192;192m",     // gris plateado (#C0C0C0 → RGB 192,192,192)
+    "opciones": "\033[38;2;64;224;208m",   // turquesa futurista (#40E0D0 → RGB 64,224,208)
+    "exito": "\033[38;2;255;215;0m",       // dorado estelar (#FFD700 → RGB 255,215,0)
+    "error": "\033[38;2;220;20;60m",       // rojo carmesí (#DC143C → RGB 220,20,60)
+    "resaltado": "\033[38;2;138;43;226m"  // violeta cósmico (#8A2BE2 → RGB 138,43,226)
+}
+// ==== Variables ====
+configuracion = {
+    "ancho": 100//cantidad de carácteres antes de agreagar un renglón
+}
+historia = []//guarda las escenas que van pasando, si se quieren usar, el usuario debe configurarlo aparte
+escena_actual = {
+    "nombre": "",
+    "descripcion": "",
+    "id": 0,
+    "opciones": []
+}
+escena_anterior = {
+    "nombre": "",
+    "descripcion": "",
+    "id": 0,
+    "opciones": []
+}
+
+// ==== Funciones Base ====
+funcion crear_escena(nombre, descripcion, id, opciones) 
+    #nombre: Titulo de la escena, debe ser una cadena
+    #descripción: texto que se muestra para la escena. Debe ser una cadena
+    #id: forma corta de referirse a la escena. Acosenjamos sea un número único para cada escena
+    #opciones: Las opciones entre las que debe elegir el jugador. Debe ser una lista
+    retornar {
+        "nombre": nombre,
+        "descripcion": descripcion,
+        "id": id,
+        "opciones": opciones
+    }
+fin
+
+funcion cambiar_escena(escena)
+    //se guarda el progreso
+    lista.agregar(historia,escena_actual)
+    escena_anterior.nombre = escena_actual.nombre
+    escena_anterior.descripcion = escena_actual.descripcion
+    escena_anterior.id = escena_actual.id
+    escena_anterior.opciones = escena_actual.opciones
+    
+    //se carga la nueva escena
+    escena_actual.nombre = escena.nombre
+    escena_actual.descripcion = escena.descripcion
+    escena_actual.id = escena.id
+    escena_actual.opciones = escena.opciones
+    
+    actualizar()//se renderiza
+fin
+
+funcion armar_cuerpo(descripcion, ancho)
+    //Mantiene todo el texto en la consola al ancho.
+    resultado = ""
+    longitud_total = cadena.longitud(descripcion)
+
+    desde (i = 0;i<longitud_total;i=i+ancho)
+        // tomar un fragmento de 'ancho' caracteres
+        fragmento = cadena.subcadena(descripcion, i, ancho)
+        si (cadena.longitud(fragmento) < ancho)
+            resultado = resultado .. fragmento .. "\n"
+        osi (cadena.termina_con(fragmento," "))
+            resultado = resultado .. fragmento
+        sino
+            resultado = resultado .. fragmento .. "_\n_"
+        fin
+        
+    fin
+
+    retornar resultado
+fin
+
+funcion centrar_encabezado(texto, ancho)
+    //centra el título
+    largo = mate.abs((ancho - cadena.longitud(texto))  / 2)
+    bordes = ""
+    si ((cadena.longitud(texto) + largo*2) >= configuracion.ancho)
+        largo = largo - 1
+    fin
+    repetir
+        bordes = bordes.."="
+    hasta (cadena.longitud(bordes)>=largo)
+    resultado = bordes..texto..bordes
+    retorno resultado
+fin
+
+
+//al ejecutarse, borra la consola y vuelve a escribir la información de la escena_actual
+funcion actualizar()
+    limpiar()
+    //se coloca el título de la escena
+    encabezado = centrar_encabezado(escena_actual.nombre,configuracion.ancho)
+    escribir (colores.negrita..colores.subrayado..colores.titulo.."╞ "..encabezado.."╣"..colores.resetear)
+
+    //se coloca la descripción de la escena
+    cuerpo = armar_cuerpo(escena_actual.descripcion, configuracion.ancho)
+    escribir (colores.texto..cuerpo..colores.resetear)
+
+    //se colocan las opciones
+    escribir (colores.opciones.."(1) "..escena_actual.opciones[0].."\n(2) "..escena_actual.opciones[1].."\n(3) "..escena_actual.opciones[2]..colores.resetear)
+
+fin
+
+/*
+//para pruebas de escenas
+menu = {
+    "nombre": "Menu Principal",
+    "descripcion": "Este es un menú principal",
+    "id": 0,
+    "opciones": ["opción 1", "opción 2", "opción 3"]
+    
+}
+
+cambiar_escena(menu)
+*/
+
+
