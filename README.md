@@ -11,21 +11,25 @@ El nombre *Teatro* refleja su enfoque narrativo: las historias se representan co
 Latino es un lenguaje de programación con sintaxis en Español creado en C, inspirado en Lua y Python. Éste proyecto nace de la necesidad de incrementar la educación de nivel básico y avanzado, para que niños, adolescentes y también adultos se motiven a entrar en el mundo de la programación y desarrollar aplicaciones en una sintaxis a su idioma. Además, Latino es también para desarrolladores que les gustaría programar en Español, ya que Latino es completamente funcional en cualquier API en raw.
 ## ¿Cómo usar?
 
-Debido a una limitación actual en el sistema de módulos de **Latino** (no es posible exportar funciones con argumentos), para utilizar **Teatro** es necesario descargar el script y crear el juego directamente dentro del mismo módulo.
-
-Por ejemplo, para definir la escena del menú principal, al final del código del módulo podemos escribir:
+Teatro puede usarse como un [Módulo] (https://manual.lenguajelatino.org/es/stable/sintaxis/Modulo.html), esto implica que solo debemos seguir los siguientes pasos:
+- Descargar el módulo teatro.lat.
+- Colocar ```teatro = incluir ("teatro")``` al comienzo del archivo donde trabajemos y listo.
+## Ejemplo mínimo: Una esena
 
 
 ```latino
-menu = crear_escena(
-    "Menú Principal",
-    "Bienvenido a Teatro, el módulo para hacer aventuras conversacionales",
-    0,
-    ["Opción 1", "Opción 2", "Opción 3"]
-)
+teatro = incluir ("teatro")
 
-cambiar_escena(menu)
+//Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena)
+menu = {
+    "nombre": "Menú Principal",
+    "descripcion": "Este es el menú",
+    "id": 0, 
+    "opciones": ["opción 1", "opción 2", "opción 3"]
+}
+
+teatro.metodos.cambiar_escena(menu)
 ```
 <img width="1147" height="164" alt="image" src="https://github.com/user-attachments/assets/3a53b9db-e27a-42af-8418-ebfb76a01837" />
 Luego quedaría agregar la lógica que quieres que se ejecute cuando se presiona el número correspondiente a la acción, para cual hay que usar la función leer(). 
-
+Nota: A veces la consola puede arrojar un error sobre una variable indefinida. Esto no afecta a la ejecución del programa, por lo que debe ser un error del intérprete.
