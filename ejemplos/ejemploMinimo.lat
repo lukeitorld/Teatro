@@ -2,18 +2,21 @@ teatro = incluir ("teatro")
 estado = teatro.estado
 metodos = teatro.metodos
 
-//Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena)
+//Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena (ni uno más ni uno menos))
 menu = {
     "nombre": "Menú Principal",
     "descripcion": "Este es el menú",
     "id": 0, 
-    "opciones": ["Saber más sobre Teatro.>teatro.metodos.cambiar_escena(modulo_teatro)<", "Nada><", "Nada ><"]
+    "opciones": ["Saber más sobre Teatro.>teatro.metodos.cambiar_escena(modulo_teatro)<", ">vacio<", "esto no aparece >vacio<"]
 }
+//En la opción 1 de la escena menu, la parte >teatro.metodos.cambiar_escena(modulo_teatro)< es la que
+//cambia la escena.
+//Mientras que >vacio< hace que la opción no aparezca.
 modulo_teatro = {
     "nombre": "Manual de Teatro",
     "descripcion": "Teatro es un módulo creado por Lukeitor para servir como un pequeño motor de juegos narrativos. Lo cual implica que trae una serie de métodos y variables que proveen la arquitectura básica y elemental para hacer un juego de aventuras de texto EN la consola. Teatro Vendría a ser el esqueleto básico para diseñar un juego narrativo, pero no un juego en sí mismo. El proyecto está en desarrollo y podría tener errores. En la versión 0.4 se puede: Mostrar escenas en la consola, elegir opciones con los números 1,2 y 3; y ejecutar funciones al elegir una opción.",
     "id": 1, 
-    "opciones": ["nada><", "nada><", "nada><"]
+    "opciones": ["Volver>teatro.metodos.cambiar_escena(menu)<", "No aparece>vacio<", "No aparece>vacio<"]
 }
 
 funcion iniciar()
@@ -22,9 +25,10 @@ funcion iniciar()
     jugando = verdadero
     //bucle central del juego. Si hay un error se puede detener con ctr + C o cerrando la consola
     mientras (jugando)
+        escribir ("Elige una opcion")
         teatro.metodos.procesar_entrada(leer())
     fin
     
 fin
-//llamamos al función para que comience el juego
+//llamamos a la función para que comience el juego
 iniciar()
