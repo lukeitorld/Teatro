@@ -55,10 +55,11 @@ funcion iniciar()
     fin
     
 fin
-
+//función externa al módulo y ejecutada desde una opción al colocarse su nombre entre ><
 funcion creditos()
     escribir ("Se ejecuta la función creditos()")
     escribir ("Teatro fue creado por Lukeitor como un proyecto de interés académico para probar los límites del lenguaje Latino.\nEl resultado es que todo funciona correctamente aunque es quisquilloso a veces.\nA lo largo del 2026 al autor le gustaría usar la biblioteca gráfica GTK disponible para Latino y usarla para reemplazar la consola por una ventana gráfica.")
 fin
+
 
 iniciar()
