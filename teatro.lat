@@ -1,15 +1,14 @@
 ###############################################################################
 # PROGRAMA: teatro.lat
 # CREADO  : 05/01/2026
-# VERSION : 0.4
+# VERSION : 0.42
 # AUTOR   : Lukeitor
 # OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola
-# Mejoras: 
-#             --Agragado la capacidad de ejcutar funciones al elegir una opcion.
+# comtenarios: 
 ###############################################################################
 
 estado = {
-    "colores" : {"resetear":"\033[0m","negrita":"\033[1m","italicas":"\033[3m","subrayado":"\033[4m","parpadeo":"\033[5m","tachado":"\033[9m ","titulo":"\033[38;2;0;191;255m","subtitulo":"\033[38;2;30;58;138m","texto":"\033[38;2;192;192;192m","opciones":"\033[38;2;64;224;208m","exito":"\033[38;2;255;215;0m","error":"\033[38;2;220;20;60m","resaltado":"\033[38;2;138;43;226m"},
+    "colores" : {"resetear":"\033[0m","negrita":"\033[1m","italicas":"\033[3m","subrayado":"\033[4m","parpadeo":"\033[5m","tachado":"\033[9m ","titulo":"\033[38;2;0;191;255m","subtitulo":"\033[38;2;30;58;138m","texto":"\033[38;2;192;192;192m","opciones":"\033[38;2;64;224;208m","exito":"\033[38;2;255;215;0m","mal":"\033[38;2;220;20;60m","resaltado":"\033[38;2;138;43;226m"},
     "configuracion" : {
         "ancho": 100
     },
@@ -53,55 +52,112 @@ metodos = {
             bordes = bordes.."="
         hasta (cadena.longitud(bordes)>=largo)
         titulo = bordes..estado.escena_actual.nombre..bordes
-
+        
+        /*
         cuerpo = ""
         longitud_total = cadena.longitud(estado.escena_actual.descripcion)
         desde (i = 0;i<longitud_total;i=i+estado.configuracion.ancho)
             fragmento = cadena.subcadena(estado.escena_actual.descripcion, i, estado.configuracion.ancho)
-            si (cadena.longitud(fragmento) < estado.configuracion.ancho)
-                cuerpo = cuerpo .. fragmento .. "\n"
-            osi (cadena.termina_con(fragmento," "))
+            fragmento_unoMas = cadena.subcadena(estado.escena_actual.descripcion, i + 1, estado.configuracion.ancho)
+            si (cadena.contiene(fragmento, "\n"))
                 cuerpo = cuerpo .. fragmento
+            osi (cadena.longitud(fragmento) < estado.configuracion.ancho)
+                cuerpo = cuerpo .. fragmento
+            osi (cadena.termina_con(fragmento," ") || cadena.termina_con(fragmento_unoMas," "))
+                cuerpo = cuerpo .. fragmento.."\n"
             sino
-                cuerpo = cuerpo .. fragmento .. "_\n_"
+                cuerpo = cuerpo .. fragmento .."_\n"
             fin
             
         fin
+        */
+        
 
         
         limpiar()
         escribir (estado.colores.negrita..estado.colores.subrayado..estado.colores.titulo.."╞ "..titulo.."╣"..estado.colores.resetear)
         
+        cuerpo = metodos.armar_cuerpo(escena.descripcion)
         escribir (estado.colores.texto..cuerpo..estado.colores.resetear)
         
-        opciones_sin_comandos = metodos.limpiar_opciones(estado.escena_actual.opciones)
+        
+        opciones_sin_comandos = metodos.procesar_opciones(escena.opciones)
+        
 
-        escribir (estado.colores.opciones.."(1) "..opciones_sin_comandos[0].."\n(2) "..opciones_sin_comandos[1].."\n(3) "..opciones_sin_comandos[2]..estado.colores.resetear)
+        escribir (estado.colores.opciones..opciones_sin_comandos[0].."\n"..opciones_sin_comandos[1].."\n"..opciones_sin_comandos[2]..estado.colores.resetear)
     fin,
-    "limpiar_opciones": funcion(opciones)
-        op1 = opciones[0]
-        op1 = cadena.subcadena(op1, 0, cadena.ultimo_indice(op1,">") - 1)
-        op2 = opciones[1]
-        op2 = cadena.subcadena(op2, 0, cadena.ultimo_indice(op2,">") - 1)
-        op3 = opciones[2]
-        op3 = cadena.subcadena(op3, 0, cadena.ultimo_indice(op3,">") - 1)
-        retorno [op1,op2,op3]
+    "armar_cuerpo": funcion (descripcion)
+        texto = ""
+        ancho = estado.configuracion.ancho
+
+        si (cadena.contiene(descripcion,"\n"))
+            en_lista = cadena.separar(descripcion,"\n")
+            num_renglones = lista.longitud(en_lista)
+
+            desde (i=0; i<num_renglones; i++)
+                largo = cadena.longitud(en_lista[i])
+                desde (t=0; t<largo; t=t+ancho)
+                    fragmento = cadena.subcadena(en_lista[i], t, ancho)
+                    texto = texto .. fragmento .. "\n"
+                fin
+            fin
+
+        sino
+            longitud_total = cadena.longitud(descripcion)
+
+            desde (i=0; i<longitud_total; i=i+ancho)
+                fragmento = cadena.subcadena(descripcion, i, ancho)
+                fragmento_unoMas = cadena.subcadena(descripcion, i+1, ancho)
+
+                si (cadena.longitud(fragmento) < ancho)
+                    texto = texto .. fragmento
+                osi (cadena.termina_con(fragmento," ") || cadena.termina_con(fragmento_unoMas," "))
+                    texto = texto .. fragmento .. "\n"
+                sino
+                    texto = texto .. fragmento .. "_\n"
+                fin
+            fin
+        fin
+        retorno texto
+    fin,
+    "procesar_opciones": funcion(opciones)
+        op = ["a","b","c"]
+        
+        si cadena.contiene(opciones[0],">vacio<")
+            op[0] = ""
+        sino
+            op[0] = "(1) "..cadena.subcadena(opciones[0],0,cadena.ultimo_indice(opciones[0],">") - 1)
+        fin
+        
+        si cadena.contiene(opciones[1],">vacio<")
+            op[1] = ""
+        sino
+            op[1] = "(2) "..cadena.subcadena(opciones[1],0,cadena.ultimo_indice(opciones[1],">") - 1)
+        fin
+        
+        si cadena.contiene(opciones[2],">vacio<")
+            op[2] = ""
+        sino
+            op[2] = "(3) "..cadena.subcadena(opciones[2],0,cadena.ultimo_indice(opciones[2],">") - 1)
+        fin
+        retornar op
     fin,
     "procesar_entrada": funcion(entrada)
         entr = acadena(entrada)
-        si cadena.contiene(entr,"1") || cadena.contiene(entr,"2") || cadena.contiene(entr,"3")
+        si (cadena.contiene(entr,"1") || cadena.contiene(entr,"2") || cadena.contiene(entr,"3"))
             activo = verdadero
             mientras (activo)
-                si entrada == 1
+                si (entrada == 1)
                     //escribir (teatro.estado.escena_actual.opciones[0])
                     metodos.procesar_opcion(estado.escena_actual.opciones[0])
                     activo = falso
                     romper
-                osi entrada == 2
+                osi (entrada == 2)
+                    //escribir (teatro.estado.escena_actual.opciones[1])
                     metodos.procesar_opcion(estado.escena_actual.opciones[1])
                     activo = falso
                     romper
-                osi entrada == 3
+                osi (entrada == 3)
                     metodos.procesar_opcion(estado.escena_actual.opciones[2])
                     activo = falso
                     romper
@@ -109,25 +165,39 @@ metodos = {
             fin
         sino
             teatro.metodos.cambiar_escena(teatro.estado.escena_actual)
-            escribir ("Entrada incorrecta, intenta de nuevo y recuerda que solo valen las entradas 1, 2 y 3.")
+            escribir (teatro.estado.colores.mal.."Entrada incorrecta, recuerda que solo valen las entradas 1, 2 y 3."..teatro.estado.colores.resetear)
         fin
     fin,
     "procesar_opcion": funcion(opcion)
-        //busca en el texto de la opción, el comando para cambiar de escena: >funcion para cambiar de escena<
+        //busca y ejecuta una función: >nombre_funcion<
         primer_indice = cadena.ultimo_indice(opcion,">") + 1
         num_caracteres = cadena.ultimo_indice(opcion,"<") - cadena.ultimo_indice(opcion,">") - 1
         //escribir ("La longitud es: ".. primer_indice)
-        si (num_caracteres < 14)
-            escribir ("error, no hay comando para ejecutar. Oprime ctr + C para detener el juego")
-            jugando = falso
+        si (!cadena.contiene(opcion,"<"))
+            escribir ("Entrada incorrecta, intenta de nuevo.")
+            teatro.metodos.cambiar_escena(teatro.estado.escena_actual)
+        osi (cadena.contiene(opcion,">vacio<"))
+            teatro.metodos.cambiar_escena(teatro.estado.escena_actual)
+            escribir (teatro.estado.colores.mal.."Entrada incorrecta, opción inválida"..teatro.estado.colores.resetear)
+        sino
+            comando = cadena.subcadena(opcion,primer_indice,num_caracteres)
+            cadena.ejecutar(comando)
         fin
-        comando = cadena.subcadena(opcion,primer_indice,num_caracteres)
         //escribir ("el comando es "..comando)
-        cadena.ejecutar(comando)
-        
-        //escena_vinculada = cadena.recortar(escena_vinculada)
     fin
 }
+
+/*//Para hacer pruebas
+menu = {
+    "nombre": "Menu Principal",
+    "descripcion": "Este es un menú principal",
+    "id": 0,
+    "opciones": ["opción 1", "opción 2", "opción 3"]
+    
+}
+metodos.cambiar_escena(menu)
+*/
+
 
 // Diccionario que se retorna y al cual se accede desde otros archivos
 retornar {
