@@ -1,12 +1,13 @@
 ###############################################################################
 # PROGRAMA: teatro.lat
 # CREADO  : 05/01/2026
-# VERSION : 0.3
+# VERSION : 0.4
 # AUTOR   : Lukeitor
-# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola.
-# DEPENDENCIAS: 
-#		ninguna
+# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola
+# Mejoras: 
+#             --Agragado la capacidad de ejcutar funciones al elegir una opcion.
 ###############################################################################
+
 estado = {
     "colores" : {"resetear":"\033[0m","negrita":"\033[1m","italicas":"\033[3m","subrayado":"\033[4m","parpadeo":"\033[5m","tachado":"\033[9m ","titulo":"\033[38;2;0;191;255m","subtitulo":"\033[38;2;30;58;138m","texto":"\033[38;2;192;192;192m","opciones":"\033[38;2;64;224;208m","exito":"\033[38;2;255;215;0m","error":"\033[38;2;220;20;60m","resaltado":"\033[38;2;138;43;226m"},
     "configuracion" : {
@@ -43,15 +44,15 @@ metodos = {
         
 
         titulo = ""
-        largo = mate.abs((estado.configuracion.ancho - cadena.longitud(estado.escena_actual.descripcion))  / 2)
+        largo = mate.abs((estado.configuracion.ancho - cadena.longitud(estado.escena_actual.nombre))  / 2)
         bordes = ""
-        si ((cadena.longitud(estado.escena_actual.descripcion) + largo*2) >= estado.configuracion.ancho)
+        si ((cadena.longitud(estado.escena_actual.nombre) + largo*2) >= estado.configuracion.ancho)
             largo = largo - 1
         fin
         repetir
             bordes = bordes.."="
         hasta (cadena.longitud(bordes)>=largo)
-        titulo = bordes..estado.escena_actual.descripcion..bordes
+        titulo = bordes..estado.escena_actual.nombre..bordes
 
         cuerpo = ""
         longitud_total = cadena.longitud(estado.escena_actual.descripcion)
@@ -72,8 +73,59 @@ metodos = {
         escribir (estado.colores.negrita..estado.colores.subrayado..estado.colores.titulo.."╞ "..titulo.."╣"..estado.colores.resetear)
         
         escribir (estado.colores.texto..cuerpo..estado.colores.resetear)
+        
+        opciones_sin_comandos = metodos.limpiar_opciones(estado.escena_actual.opciones)
 
-        escribir (estado.colores.opciones.."(1) "..estado.escena_actual.opciones[0].."\n(2) "..estado.escena_actual.opciones[1].."\n(3) "..estado.escena_actual.opciones[2]..estado.colores.resetear)
+        escribir (estado.colores.opciones.."(1) "..opciones_sin_comandos[0].."\n(2) "..opciones_sin_comandos[1].."\n(3) "..opciones_sin_comandos[2]..estado.colores.resetear)
+    fin,
+    "limpiar_opciones": funcion(opciones)
+        op1 = opciones[0]
+        op1 = cadena.subcadena(op1, 0, cadena.ultimo_indice(op1,">") - 1)
+        op2 = opciones[1]
+        op2 = cadena.subcadena(op2, 0, cadena.ultimo_indice(op2,">") - 1)
+        op3 = opciones[2]
+        op3 = cadena.subcadena(op3, 0, cadena.ultimo_indice(op3,">") - 1)
+        retorno [op1,op2,op3]
+    fin,
+    "procesar_entrada": funcion(entrada)
+        entr = acadena(entrada)
+        si cadena.contiene(entr,"1") || cadena.contiene(entr,"2") || cadena.contiene(entr,"3")
+            activo = verdadero
+            mientras (activo)
+                si entrada == 1
+                    //escribir (teatro.estado.escena_actual.opciones[0])
+                    metodos.procesar_opcion(estado.escena_actual.opciones[0])
+                    activo = falso
+                    romper
+                osi entrada == 2
+                    metodos.procesar_opcion(estado.escena_actual.opciones[1])
+                    activo = falso
+                    romper
+                osi entrada == 3
+                    metodos.procesar_opcion(estado.escena_actual.opciones[2])
+                    activo = falso
+                    romper
+                fin
+            fin
+        sino
+            teatro.metodos.cambiar_escena(teatro.estado.escena_actual)
+            escribir ("Entrada incorrecta, intenta de nuevo y recuerda que solo valen las entradas 1, 2 y 3.")
+        fin
+    fin,
+    "procesar_opcion": funcion(opcion)
+        //busca en el texto de la opción, el comando para cambiar de escena: >funcion para cambiar de escena<
+        primer_indice = cadena.ultimo_indice(opcion,">") + 1
+        num_caracteres = cadena.ultimo_indice(opcion,"<") - cadena.ultimo_indice(opcion,">") - 1
+        //escribir ("La longitud es: ".. primer_indice)
+        si (num_caracteres < 14)
+            escribir ("error, no hay comando para ejecutar. Oprime ctr + C para detener el juego")
+            jugando = falso
+        fin
+        comando = cadena.subcadena(opcion,primer_indice,num_caracteres)
+        //escribir ("el comando es "..comando)
+        cadena.ejecutar(comando)
+        
+        //escena_vinculada = cadena.recortar(escena_vinculada)
     fin
 }
 
