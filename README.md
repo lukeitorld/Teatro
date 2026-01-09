@@ -23,6 +23,8 @@ estado = teatro.estado
 metodos = teatro.metodos
 
 //Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena)
+//Para cambiar de escena al elegir una opcion se puede hacer lo siguiente: escribir la función teatro.metodos.cambiar_escena(escena_a_cambiar) entre >< dentro del texto de una opción.
+//la siguiente escena, menu, tiene en su primera opción la capacidad de cambiar a la escena guardada en modulo_teatro.
 menu = {
     "nombre": "Menú Principal",
     "descripcion": "Este es el menú",
