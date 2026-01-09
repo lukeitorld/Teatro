@@ -1,0 +1,64 @@
+//Cargamos el módulo
+teatro = incluir ("teatro")
+estado = teatro.estado
+metodos = teatro.metodos
+/*
+En este ejemplo escribiremos en pantalla la información de teatro, latino y ejecutaremos la función creditos(), que está al final del script, al elegir la opción 3 en el menú principal
+En teatro usamos escenas para representar texto y opciones. Una escena en blanco es la siguiente:
+nombre_diccionario = {
+    "nombre": "Aquí va el título de la escea",
+    "descripcion": "Aquí va el texto que describe la escena o los sucesos en la escena",
+    "id": 0, 
+    "opciones": ["opción 1", "opción 2", "opción 3"]
+}
+Donde:
+    #nombre: Titulo de la escena, debe ser una cadena
+    #descripción: texto que se muestra para la escena. Debe ser una cadena.
+    #id: forma corta de referirse a la escena. Acosenjamos sea un número único para cada escena. De momento, no tiene utilidad.
+    #opciones: Las opciones entre las que debe elegir el jugador. Debe ser una lista de tres elementos con cada elemento siendo una cadena.
+*/
+// ==== Eescenas ====
+menu = {
+    "nombre": "Menú Principal",
+    "descripcion": "Bienvenido a Teatro, el módulo para crear historias interactivas.\nPara continuar debes presionar el número correspondiente a la opción que deseas seguir (entre parentesis) y luego apretar enter.",
+    "id": 0, 
+    "opciones": ["¿Cómo lo uso? >teatro.metodos.cambiar_escena(manual)<", "Saber más sobre Latino.>teatro.metodos.cambiar_escena(latino)<", "Ejecutar una función del script ejemplo.lat>creditos()<"]
+}
+//en la escena anterior la opción 1 tiene >teatro.metodos.cambiar_escena(manual)<, lo que significa que elegir esta opción lleva a la escena almacenada en la variable manual.
+
+//aquí redirige la opción "¿cómo lo uso?" en "menu"
+manual = {
+    "nombre": " Manual de Teatro ",
+    "descripcion": "Teatro es un módulo creado por Lukeitor para servir como un pequeño motor de juegos narrativos. \nLo cual implica que trae una serie de métodos y variables que proveen la arquitectura básica y elemental para hacer un juego de aventuras de texto EN la consola. \nTeatro es el esqueleto básico para diseñar un juego narrativo no un juego en sí mismo. \nEn la versión 0.4 se puede: Mostrar escenas en la consola, elegir opciones con los números 1,2 y 3; y ejecutar funciones al elegir una opción.",
+    "id": 1, 
+    "opciones": ["volver.>teatro.metodos.cambiar_escena(menu)<", "opcion2. >vacio<", "opcion3 >vacio<"]
+}
+//aquí redirige la opción "saber sobre latino" en "menu"
+latino = {
+    "nombre": " Sobre Latino ",
+    "descripcion": "Latino es un lenguaje de programación con sintaxis en Español, desarrollado en el 2015. Este lenguaje está inspirado en Python y Lua.",
+    "id": 2, 
+    "opciones": ["volver.>teatro.metodos.cambiar_escena(menu)<", "opción 2.>vacio<", "opción 3.>vacio<"]
+}
+//Notemos que las opciones volver, cargan la escena menú y que las opciones con >vacio< no aparecen
+//en la pantalla. Una escena de teatro debe tener entre siempre tres elementos en la lista opciones.
+//si se quieren usar menos de tres, basta con poner >vacio< en las que no se desean. 
+
+// ==== Comenzar ====
+funcion iniciar()
+    //Método del módulo que borra la consola y carga la información de la escena menu.
+    teatro.metodos.cambiar_escena(menu)
+    jugando = verdadero
+    mientras (jugando)
+        escribir ("Elige una opcion")
+        teatro.metodos.procesar_entrada(leer())
+    fin
+    
+fin
+
+funcion creditos()
+    escribir ("Se ejecuta la función creditos()")
+    escribir ("Teatro fue creado por Lukeitor como un proyecto de interés académico para probar los límites del lenguaje Latino.\nEl resultado es que todo funciona correctamente aunque es quisquilloso a veces.\nA lo largo del 2026 al autor le gustaría usar la biblioteca gráfica GTK disponible para Latino y usarla para reemplazar la consola por una ventana gráfica.")
+fin
+
+iniciar()
