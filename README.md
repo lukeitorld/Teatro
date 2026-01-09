@@ -13,24 +13,48 @@ Latino es un lenguaje de programación con sintaxis en Español creado en C, ins
 
 Teatro puede usarse como un [Módulo] (https://manual.lenguajelatino.org/es/stable/sintaxis/Modulo.html), esto implica que solo debemos seguir los siguientes pasos:
 - Descargar el módulo teatro.lat.
-- Colocar ```teatro = incluir ("teatro")``` al comienzo del archivo donde trabajemos, también ```estado = teatro.estado``` y listo.
-## Ejemplo mínimo: Una esena
+- Colocar ```teatro = incluir ("teatro")``` al comienzo del archivo donde trabajemos, junto con  ```estado = teatro.estado``` y ```metodos = teatro.metodos```.
+## Ejemplo mínimo: Dos escenas
 
 
 ```latino
 teatro = incluir ("teatro")
 estado = teatro.estado
+metodos = teatro.metodos
 
 //Estructura obligatoria que debe tener una escena: Un diccionario con 4 elementos (nombre: cadena, descripcion: cadena, id:decimal, opciones: lista con 3 datos del tipo cadena)
 menu = {
     "nombre": "Menú Principal",
     "descripcion": "Este es el menú",
     "id": 0, 
-    "opciones": ["opción 1", "opción 2", "opción 3"]
+    "opciones": ["Saber más sobre Teatro.>teatro.metodos.cambiar_escena(modulo_teatro)<", "Nada><", "Nada ><"]
+}
+modulo_teatro = {
+    "nombre": "Manual de Teatro",
+    "descripcion": "Teatro es un módulo creado por Lukeitor para servir como un pequeño motor de juegos narrativos. Lo cual implica que trae una serie de métodos y variables que proveen la arquitectura básica y elemental para hacer un juego de aventuras de texto EN la consola. Teatro Vendría a ser el esqueleto básico para diseñar un juego narrativo, pero no un juego en sí mismo. El proyecto está en desarrollo y podría tener errores. En la versión 0.4 se puede: Mostrar escenas en la consola, elegir opciones con los números 1,2 y 3; y ejecutar funciones al elegir una opción.",
+    "id": 1, 
+    "opciones": ["nada><", "nada><", "nada><"]
 }
 
-teatro.metodos.cambiar_escena(menu)
+funcion iniciar()
+    //Método del módulo que borra la consola y carga la información de la escena menu.
+    teatro.metodos.cambiar_escena(menu)
+    jugando = verdadero
+    //bucle central del juego. Si hay un error se puede detener con ctr + C o cerrando la consola
+    mientras (jugando)
+        teatro.metodos.procesar_entrada(leer())
+    fin
+    
+fin
+//llamamos al función para que comience el juego
+iniciar()
+//llamamos al función para que comience el juego
+iniciar()
 ```
-<img width="1147" height="164" alt="image" src="https://github.com/user-attachments/assets/3a53b9db-e27a-42af-8418-ebfb76a01837" />
-Luego quedaría agregar la lógica que quieres que se ejecute cuando se presiona el número correspondiente a la acción, para cual hay que usar la función leer(). 
-Nota: A veces la consola puede arrojar un error sobre una variable indefinida. Esto no afecta a la ejecución del programa, por lo que debe ser un error del intérprete.
+## Roadmap
+- V 0.40 --> Ejecutar funciones al elegir una opción.
+- V 0.43 --> Agregar evento cuando_entra al cambiar de escena.
+- V 0.46 --> Agregar capacidad de configurar los colores y estilos de texto.
+- V 0.49 --> Agregar sistema de guardar/cargar.
+- V 0.50 --> Versión final de Teatro para consola.
+- V 0.51~1.00 --> Versión de Teatro con ventana gráfica usando la librería GTK. 
