@@ -1,0 +1,84 @@
+###############################################################################
+# PROGRAMA: teatro.lat
+# CREADO  : 05/01/2026
+# VERSION : 0.3
+# AUTOR   : Lukeitor
+# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola.
+# DEPENDENCIAS: 
+#		ninguna
+###############################################################################
+estado = {
+    "colores" : {"resetear":"\033[0m","negrita":"\033[1m","italicas":"\033[3m","subrayado":"\033[4m","parpadeo":"\033[5m","tachado":"\033[9m ","titulo":"\033[38;2;0;191;255m","subtitulo":"\033[38;2;30;58;138m","texto":"\033[38;2;192;192;192m","opciones":"\033[38;2;64;224;208m","exito":"\033[38;2;255;215;0m","error":"\033[38;2;220;20;60m","resaltado":"\033[38;2;138;43;226m"},
+    "configuracion" : {
+        "ancho": 100
+    },
+    "historia" : [],
+    "escena_actual" : {
+        "nombre": "",
+        "descripcion": "",
+        "id": 0,
+        "opciones": []
+    },
+    "escena_anterior" : {
+        "nombre": "",
+        "descripcion": "",
+        "id": 0,
+        "opciones": []
+    }
+}
+
+metodos = {
+    "cambiar_escena": funcion(escena)
+        lista.agregar(estado.historia, estado.escena_actual)
+        estado.escena_anterior.nombre = estado.escena_actual.nombre
+        estado.escena_anterior.descripcion = estado.escena_actual.descripcion
+        estado.escena_anterior.id = estado.escena_actual.id
+        estado.escena_anterior.opciones = estado.escena_actual.opciones
+        
+
+        estado.escena_actual.nombre = escena.nombre
+        estado.escena_actual.descripcion = escena.descripcion
+        estado.escena_actual.id = escena.id
+        estado.escena_actual.opciones = escena.opciones
+        
+
+        titulo = ""
+        largo = mate.abs((estado.configuracion.ancho - cadena.longitud(estado.escena_actual.descripcion))  / 2)
+        bordes = ""
+        si ((cadena.longitud(estado.escena_actual.descripcion) + largo*2) >= estado.configuracion.ancho)
+            largo = largo - 1
+        fin
+        repetir
+            bordes = bordes.."="
+        hasta (cadena.longitud(bordes)>=largo)
+        titulo = bordes..estado.escena_actual.descripcion..bordes
+
+        cuerpo = ""
+        longitud_total = cadena.longitud(estado.escena_actual.descripcion)
+        desde (i = 0;i<longitud_total;i=i+estado.configuracion.ancho)
+            fragmento = cadena.subcadena(estado.escena_actual.descripcion, i, estado.configuracion.ancho)
+            si (cadena.longitud(fragmento) < estado.configuracion.ancho)
+                cuerpo = cuerpo .. fragmento .. "\n"
+            osi (cadena.termina_con(fragmento," "))
+                cuerpo = cuerpo .. fragmento
+            sino
+                cuerpo = cuerpo .. fragmento .. "_\n_"
+            fin
+            
+        fin
+
+        
+        limpiar()
+        escribir (estado.colores.negrita..estado.colores.subrayado..estado.colores.titulo.."╞ "..titulo.."╣"..estado.colores.resetear)
+        
+        escribir (estado.colores.texto..cuerpo..estado.colores.resetear)
+
+        escribir (estado.colores.opciones.."(1) "..estado.escena_actual.opciones[0].."\n(2) "..estado.escena_actual.opciones[1].."\n(3) "..estado.escena_actual.opciones[2]..estado.colores.resetear)
+    fin
+}
+
+// Diccionario que se retorna y al cual se accede desde otros archivos
+retornar {
+    "estado": estado,
+    "metodos": metodos
+}
