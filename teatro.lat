@@ -1,12 +1,19 @@
 ###############################################################################
-# PROGRAMA: teatro.lat
-# CREADO  : 05/01/2026
-# VERSION : 0.42
+# PROGRAMA: Teatro 0.5
+# CREADO  : Enero del 2026
+# VERSION : 0.5
 # AUTOR   : Lukeitor
-# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola
-# comtenarios: 
+# OBJETIVO: Un módulo para hacer juegos de texto interactivo con la consola.
+# Github del proyecto: https://github.com/lukeitorld/Teatro <--Hay ejemplos de uso
 ###############################################################################
-
+//Esta es la versión final, salvo que halya errores para corregir
+//Errores sin solución: A veces el texto se va más allá de lo indicado por
+//la configuración ancho. No lo pude arreglar.
+/* Características:
+    -Cargar escenas en la consola.
+    -Cambiar la escena que se muestra.
+    -Ejecutar métodos del módulo o funciones del juego al seleccionar una opción.
+*/
 estado = {
     "colores" : {"resetear":"\033[0m","negrita":"\033[1m","italicas":"\033[3m","subrayado":"\033[4m","parpadeo":"\033[5m","tachado":"\033[9m ","titulo":"\033[38;2;0;191;255m","subtitulo":"\033[38;2;30;58;138m","texto":"\033[38;2;192;192;192m","opciones":"\033[38;2;64;224;208m","exito":"\033[38;2;255;215;0m","mal":"\033[38;2;220;20;60m","resaltado":"\033[38;2;138;43;226m"},
     "configuracion" : {
@@ -41,6 +48,7 @@ metodos = {
         estado.escena_actual.id = escena.id
         estado.escena_actual.opciones = escena.opciones
         
+        
 
         titulo = ""
         largo = mate.abs((estado.configuracion.ancho - cadena.longitud(estado.escena_actual.nombre))  / 2)
@@ -52,25 +60,6 @@ metodos = {
             bordes = bordes.."="
         hasta (cadena.longitud(bordes)>=largo)
         titulo = bordes..estado.escena_actual.nombre..bordes
-        
-        /*
-        cuerpo = ""
-        longitud_total = cadena.longitud(estado.escena_actual.descripcion)
-        desde (i = 0;i<longitud_total;i=i+estado.configuracion.ancho)
-            fragmento = cadena.subcadena(estado.escena_actual.descripcion, i, estado.configuracion.ancho)
-            fragmento_unoMas = cadena.subcadena(estado.escena_actual.descripcion, i + 1, estado.configuracion.ancho)
-            si (cadena.contiene(fragmento, "\n"))
-                cuerpo = cuerpo .. fragmento
-            osi (cadena.longitud(fragmento) < estado.configuracion.ancho)
-                cuerpo = cuerpo .. fragmento
-            osi (cadena.termina_con(fragmento," ") || cadena.termina_con(fragmento_unoMas," "))
-                cuerpo = cuerpo .. fragmento.."\n"
-            sino
-                cuerpo = cuerpo .. fragmento .."_\n"
-            fin
-            
-        fin
-        */
         
 
         
@@ -90,8 +79,8 @@ metodos = {
         texto = ""
         ancho = estado.configuracion.ancho
 
-        si (cadena.contiene(descripcion,"\n"))
-            en_lista = cadena.separar(descripcion,"\n")
+        si (metodos.la_cadena_contiene(descripcion,"\n"))
+            en_lista = metodos.separar_cadena(descripcion,"\n")
             num_renglones = lista.longitud(en_lista)
 
             desde (i=0; i<num_renglones; i++)
@@ -101,21 +90,11 @@ metodos = {
                     texto = texto .. fragmento .. "\n"
                 fin
             fin
-
         sino
             longitud_total = cadena.longitud(descripcion)
-
             desde (i=0; i<longitud_total; i=i+ancho)
                 fragmento = cadena.subcadena(descripcion, i, ancho)
-                fragmento_unoMas = cadena.subcadena(descripcion, i+1, ancho)
-
-                si (cadena.longitud(fragmento) < ancho)
-                    texto = texto .. fragmento
-                osi (cadena.termina_con(fragmento," ") || cadena.termina_con(fragmento_unoMas," "))
-                    texto = texto .. fragmento .. "\n"
-                sino
-                    texto = texto .. fragmento .. "_\n"
-                fin
+                texto = texto .. fragmento .. "\n"
             fin
         fin
         retorno texto
@@ -123,19 +102,19 @@ metodos = {
     "procesar_opciones": funcion(opciones)
         op = ["a","b","c"]
         
-        si cadena.contiene(opciones[0],">vacio<")
+        si (cadena.contiene(opciones[0],">vacio<"))
             op[0] = ""
         sino
             op[0] = "(1) "..cadena.subcadena(opciones[0],0,cadena.ultimo_indice(opciones[0],">") - 1)
         fin
         
-        si cadena.contiene(opciones[1],">vacio<")
+        si (cadena.contiene(opciones[1],">vacio<"))
             op[1] = ""
         sino
             op[1] = "(2) "..cadena.subcadena(opciones[1],0,cadena.ultimo_indice(opciones[1],">") - 1)
         fin
         
-        si cadena.contiene(opciones[2],">vacio<")
+        si (cadena.contiene(opciones[2],">vacio<"))
             op[2] = ""
         sino
             op[2] = "(3) "..cadena.subcadena(opciones[2],0,cadena.ultimo_indice(opciones[2],">") - 1)
@@ -184,10 +163,67 @@ metodos = {
             cadena.ejecutar(comando)
         fin
         //escribir ("el comando es "..comando)
+    fin,
+    "la_cadena_contiene": funcion(texto, sub)
+    longitud_texto = cadena.longitud(texto)
+    longitud_sub = cadena.longitud(sub)
+
+    desde (i = 0; i <= longitud_texto - longitud_sub; i = i + 1)
+        fragmento = cadena.subcadena(texto, i, longitud_sub)
+        si (fragmento == sub)
+            retorno verdadero
+        fin
+    fin
+
+    retorno falso
+fin,
+"separar_cadena": funcion(texto, separador)
+    partes = []
+    actual = ""
+
+    longitud = cadena.longitud(texto)
+    longitud_sep = cadena.longitud(separador)
+
+    si longitud_sep == 0
+        // si el separador está vacío, devolvemos el texto completo como única parte
+        partes[0] = texto
+        retorno partes
+    fin
+
+    i = 0
+    mientras (i < longitud)
+        // mirar un fragmento del tamaño del separador
+        si (i + longitud_sep) <= longitud
+            probe = cadena.subcadena(texto, i, longitud_sep)
+        sino
+            probe = "" // no hay suficiente texto para igualar el separador
+        fin
+
+        si (probe == separador)
+            // “flush” del bloque acumulado
+            idx = lista.longitud(partes)
+            partes[idx] = actual
+            actual = ""
+            i = i + longitud_sep
+        sino
+            // agregar un solo carácter al bloque
+            c = cadena.subcadena(texto, i, 1)
+            actual = actual .. c
+            i = i + 1
+        fin
+    fin
+
+    // último fragmento: apendear por índice (evita agregar(...))
+    si (cadena.longitud(actual) > 0) || (lista.longitud(partes) == 0)
+        idx = lista.longitud(partes)
+        partes[idx] = actual
+    fin
+
+    retorno partes
     fin
 }
 
-/*//Para hacer pruebas
+/*//Para hacer pruebas rápidas
 menu = {
     "nombre": "Menu Principal",
     "descripcion": "Este es un menú principal",
